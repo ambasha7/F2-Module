@@ -62,7 +62,7 @@ addStudent.addEventListener('click',function(){
     write = "";
     for(x in students){
         write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].grade}</td><td>${students[x].degree}
-        <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img src="./assest/trash-svgrepo-com.svg"></td></tr>`
+        <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img onclick="deleteStudent(${students[x].ID})" src="./assest/trash-svgrepo-com.svg"></td></tr>`
     }
 
     document.getElementById("tbody").innerHTML = write;
