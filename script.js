@@ -5,15 +5,17 @@ let students = [
 ];
 let addStudent ;
 let editStudent ;
+let searchField ;
 let id = 4;
 let currId ;
 
 (function load(){
     addStudent = document.getElementById("addStudent");
     editStudent = document.getElementById("editStudent");
+    searchField = document.getElementById("search")
     write = "";
     for(x in students){
-        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].gpa}</td><td>${students[x].degree}
+        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].grade}</td><td>${students[x].degree}
         <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img onclick="deleteStudent(${students[x].ID})" src="./assest/trash-svgrepo-com.svg"></td></tr>`
     }
 
@@ -43,8 +45,7 @@ addStudent.addEventListener('click',function(){
         "ID" : getId(),
         "name" : name.value,
         'age' : age.value,
-        "grade" : 'A',
-        "gpa" : gpa.value,
+        "grade" : gpa.value.toUpperCase(),
         "degree" : degree.value,
         "email" : email.value,
     }
@@ -60,7 +61,7 @@ addStudent.addEventListener('click',function(){
 
     write = "";
     for(x in students){
-        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].gpa}</td><td>${students[x].degree}
+        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].grade}</td><td>${students[x].degree}
         <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img src="./assest/trash-svgrepo-com.svg"></td></tr>`
     }
 
@@ -90,8 +91,8 @@ editStudent.addEventListener('click',function(){
         "ID" : currId,
         "name" : name.value,
         'age' : age.value,
-        "grade" : 'A',
-        "gpa" : gpa.value,
+        
+        "grade" : gpa.value.toUpperCase(),
         "degree" : degree.value,
         "email" : email.value,
     }
@@ -108,7 +109,7 @@ editStudent.addEventListener('click',function(){
     editStudent.style.display="none"
     write = "";
     for(x in students){
-        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].gpa}</td><td>${students[x].degree}
+        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].grade}</td><td>${students[x].degree}
         <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img onclick="deleteStudent(${students[x].ID})" src="./assest/trash-svgrepo-com.svg"></td></tr>`
     }
 
@@ -118,11 +119,11 @@ editStudent.addEventListener('click',function(){
 function edit(id){
     
     let student = students.map(n => n).filter(n => n.ID==id)
-   currId=id;
+    currId=id;
 
     document.getElementById("name").value = student[0].name
     document.getElementById("email").value = student[0].email
-    document.getElementById("gpa").value = student[0].gpa
+    document.getElementById("gpa").value = student[0].grade
     document.getElementById("age").value = student[0].age
     document.getElementById("degree").value = student[0].degree
 
@@ -140,9 +141,46 @@ function deleteStudent(id){
     }
     write = "";
     for(x in students){
-        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].gpa}</td><td>${students[x].degree}
+        write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].grade}</td><td>${students[x].degree}
         <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img onclick="deleteStudent(${students[x].ID})" src="./assest/trash-svgrepo-com.svg"></td></tr>`
     }
 
     document.getElementById("tbody").innerHTML = write;
+}
+
+searchField.addEventListener('keyup',function(){
+    if(searchField.value.toString().trim().length>0){
+        searchStudents();
+    }else{
+        write = "";
+        for(x in students){
+            write = write+`<tr><td>${students[x].ID}</td><td>${students[x].name}</td><td>${students[x].email}</td><td>${students[x].age}</td><td>${students[x].grade}</td><td>${students[x].degree}
+            <img  id="edit-btn" onclick="edit(${students[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img onclick="deleteStudent(${students[x].ID})" src="./assest/trash-svgrepo-com.svg"></td></tr>`
+        }
+    
+        document.getElementById("tbody").innerHTML = write;
+    }
+})
+
+
+function searchStudents(){
+    
+    let searchValue = searchField.value.toLowerCase();
+    
+
+    let filter = students.map(n=>n).filter(student =>  
+        student.name.toLowerCase().includes(searchValue) ||
+        student.email.toLowerCase().includes(searchValue) ||
+        student.degree.toLowerCase().includes(searchValue)
+    )
+    console.log(filter)
+    
+    write = "";
+    for(x in filter){
+        write = write+`<tr><td>${filter[x].ID}</td><td>${filter[x].name}</td><td>${filter[x].email}</td><td>${filter[x].age}</td><td>${filter[x].grade}</td><td>${filter[x].degree}
+        <img  id="edit-btn" onclick="edit(${filter[x].ID})" src="./assest/pencil-svgrepo-com.svg"> <img onclick="deleteStudent(${filter[x].ID})" src="./assest/trash-svgrepo-com.svg"></td></tr>`
+    }
+
+    document.getElementById("tbody").innerHTML = write;
+
 }
